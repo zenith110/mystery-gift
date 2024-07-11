@@ -53,10 +53,10 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
-github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240707182439-6e85b555954d h1:T6+RLrHRw3lfUGBgL8r286keVyD2EtRkLRW2+CvyRYg=
-github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240707182439-6e85b555954d/go.mod h1:UxNp48E9je4xAzSilmRuXRwH1XnN5p4KIW/LUQhy1Io=
 github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240708015013-819bbdb4f8aa h1:thmMPah0faP1JtJar1VS1DbSWYw3/bzkzIxp2KWqGk8=
 github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240708015013-819bbdb4f8aa/go.mod h1:UxNp48E9je4xAzSilmRuXRwH1XnN5p4KIW/LUQhy1Io=
+github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711150909-5f972becc8c6 h1:3Dggetly3xkH9/JVYclPfTvFKzu3HaH7z054s3uLLR8=
+github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711150909-5f972becc8c6/go.mod h1:UxNp48E9je4xAzSilmRuXRwH1XnN5p4KIW/LUQhy1Io=
 go.opencensus.io v0.22.5 h1:dntmOdLpSpHlVqbW5Eay97DelsZHe+55D+xC6i0dDS0=
 go.opencensus.io v0.22.5/go.mod h1:5pWMHQbX5EPX2/62yrJeAkowc+lfs/XD7Uxpq3pI6kk=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

@@ -13,7 +13,7 @@ import (
 
 var client *badger.DB
 
-func (mgdb MysteryGiftDB) SetUpDB() {
+func SetUpDB() {
 	if client != nil {
 		var err error
 		opt := badger.DefaultOptions("").WithInMemory(true)
@@ -24,7 +24,7 @@ func (mgdb MysteryGiftDB) SetUpDB() {
 	}
 }
 
-func (mgdb MysteryGiftDB) InsertDBData() {
+func InsertDBData() {
 	file, err := os.Open("gifts.toml")
 	if err != nil {
 		panic(err)
@@ -36,18 +36,18 @@ func (mgdb MysteryGiftDB) InsertDBData() {
 		panic(err)
 	}
 
-	var mysteryGifts []Models.MysteryGift
+	var mysteryGifts Models.MysteryGiftsServer
 
 	err = toml.Unmarshal(bytes, &mysteryGifts)
 
 	if err != nil {
 		panic(err)
 	}
-	for mysteryGiftIndex := range mysteryGifts {
+	for mysteryGiftIndex := range mysteryGifts.Mysterygifts {
 		err = client.Update(func(txn *badger.Txn) error {
-			if mysteryGifts[mysteryGiftIndex].GiftType == "Pokemon" {
-				data := fmt.Sprintf("%v", mysteryGifts[mysteryGiftIndex].Pokemon)
-				txn.Set([]byte(mysteryGifts[mysteryGiftIndex].Name), []byte(data))
+			if mysteryGifts.Mysterygifts[mysteryGiftIndex].GiftType == "Pokemon" {
+				data := fmt.Sprintf("%v", mysteryGifts.Mysterygifts[mysteryGiftIndex].Pokemon)
+				txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), []byte(data))
 				return nil
 			}
 			return nil
@@ -62,12 +62,12 @@ func TimeCheck(startDate, endDate, playerDate time.Time) bool {
 	return startDate.After(playerDate) && endDate.Before(playerDate)
 }
 
-func (mgdb MysteryGiftDB) SearchDBData(currentDate string, giftName string) Models.MysteryGift {
+func SearchDBData(currentDate string, giftName string) Models.MysteryGiftServer {
 	// Create a byte array to copy the data from the db into
 	var mysteryGiftData []byte
 
 	// Create the struct to dump the returned data into
-	var mysteryGift Models.MysteryGift
+	var mysteryGift Models.MysteryGiftServer
 	// Begins the transaction of viewing the data
 	err := client.View(func(txn *badger.Txn) error {
 		// Grabs the specific data based off the gift name
