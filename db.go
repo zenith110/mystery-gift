@@ -13,7 +13,7 @@ import (
 
 var client *badger.DB
 
-func (mgdb MysteryGiftDB) SetUpDB() *badger.DB {
+func (mgdb MysteryGiftDB) SetUpDB() {
 	if client != nil {
 		var err error
 		opt := badger.DefaultOptions("").WithInMemory(true)
@@ -21,9 +21,7 @@ func (mgdb MysteryGiftDB) SetUpDB() *badger.DB {
 		if err != nil {
 			fmt.Printf("Error while setting up db!\nError is %v", err)
 		}
-		return client
 	}
-	return client
 }
 
 func (mgdb MysteryGiftDB) InsertDBData() {
@@ -59,20 +57,29 @@ func (mgdb MysteryGiftDB) InsertDBData() {
 		}
 	}
 }
+
 func TimeCheck(startDate, endDate, playerDate time.Time) bool {
 	return startDate.After(playerDate) && endDate.Before(playerDate)
 }
+
 func (mgdb MysteryGiftDB) SearchDBData(currentDate string, giftName string) Models.MysteryGift {
+	// Create a byte array to copy the data from the db into
 	var mysteryGiftData []byte
+
+	// Create the struct to dump the returned data into
 	var mysteryGift Models.MysteryGift
+	// Begins the transaction of viewing the data
 	err := client.View(func(txn *badger.Txn) error {
+		// Grabs the specific data based off the gift name
 		data, _ := txn.Get([]byte(giftName))
+		// Creates a copy to be used for use outside of the db view
 		err := data.Value(func(val []byte) error {
 			// Copying or parsing val is valid.
 			mysteryGiftData = append([]byte{}, val...)
 
 			return nil
 		})
+
 		if err != nil {
 			panic(err)
 		}
@@ -88,11 +95,14 @@ func (mgdb MysteryGiftDB) SearchDBData(currentDate string, giftName string) Mode
 	if err != nil {
 		panic(err)
 	}
+
+	// Checks if the player can recieve the gift based off the system clock(can be modified at any time by the user)
 	beginningDate, _ := time.Parse("2006-01-02", mysteryGift.BeginningDate)
 	endDate, _ := time.Parse("2006-01-02", mysteryGift.EndDate)
 	playerDate, _ := time.Parse("2006-01-02", currentDate)
 	if TimeCheck(beginningDate, endDate, playerDate) {
 		return mysteryGift
 	}
+
 	return mysteryGift
 }
