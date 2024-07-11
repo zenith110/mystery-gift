@@ -18,13 +18,11 @@ var addr = flag.String("addr", ":8080", "http service address")
 var client *badger.DB
 
 func SetUpDB() {
-	if client != nil {
-		var err error
-		opt := badger.DefaultOptions("").WithInMemory(true)
-		client, err = badger.Open(opt)
-		if err != nil {
-			fmt.Printf("Error while setting up db!\nError is %v", err)
-		}
+	var err error
+	opt := badger.DefaultOptions("").WithInMemory(true)
+	client, err = badger.Open(opt)
+	if err != nil {
+		fmt.Printf("Error while setting up db!\nError is %v", err)
 	}
 }
 
@@ -46,24 +44,23 @@ func InsertDBData() {
 
 	if err != nil {
 		fmt.Printf("Error occured while reading data!\nError is %v", err)
-		// panic(err)
+		panic(err)
 	}
-	var genericErr error
+
 	for mysteryGiftIndex := range mysteryGifts.Mysterygifts {
-		fmt.Printf("Looking at %s\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
-		err = client.Update(func(txn *badger.Txn) error {
+		fmt.Printf("Looking at %s event!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
+		transactionErr := client.Update(func(txn *badger.Txn) error {
 			if mysteryGifts.Mysterygifts[mysteryGiftIndex].GiftType == "Pokemon" {
-				fmt.Print("hello")
-				// data := fmt.Sprintf("%v", mysteryGifts.Mysterygifts[mysteryGiftIndex].Pokemongift)
-				// fmt.Print(data)
-				// txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), []byte(data))
+				data := fmt.Sprintf("%v", mysteryGifts.Mysterygifts[mysteryGiftIndex].Pokemongift)
+				txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), []byte(data))
+				fmt.Printf("Have successfully inserted pokemon event %s!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
 				return nil
 			}
-			return genericErr
+			return nil
 		})
-		if err != nil {
-			fmt.Printf("Error occured while storing data!\nError is %v", err)
-			// panic(err)
+		if transactionErr != nil {
+			fmt.Printf("Error occured while inserting data!\nError is %v\n", err)
+			panic(transactionErr)
 		}
 	}
 }
