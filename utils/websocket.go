@@ -1,11 +1,15 @@
-package main
+package utils
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
 )
+
+var upgrader = websocket.Upgrader{}
+var addr = flag.String("addr", ":8080", "http service address")
 
 func Reader(conn *websocket.Conn) {
 	for {
@@ -39,4 +43,8 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 func HandleRoutes() {
 	http.HandleFunc("/ws", WsEndpoint)
+	err := http.ListenAndServe(*addr, nil)
+	if err != nil {
+		log.Fatalf("Error occured while setting up server!\nError is %v", err)
+	}
 }

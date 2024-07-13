@@ -1,16 +1,16 @@
-module github.com/zenith110/mystery-gift
+module github.com/zenith110/mystery-gift/utils
 
 go 1.21.1
 
 require (
+	github.com/BurntSushi/toml v1.4.0
+	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/zenith110/mystery-gift/utils v0.0.0-00010101000000-000000000000
+	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711205431-6f68c2cd85ae
 )
 
 require (
-	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -21,11 +21,8 @@ require (
 	github.com/google/flatbuffers v1.12.1 // indirect
 	github.com/klauspost/compress v1.12.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711205431-6f68c2cd85ae // indirect
 	go.opencensus.io v0.22.5 // indirect
-	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
-
-replace github.com/zenith110/mystery-gift/utils => ./utils
