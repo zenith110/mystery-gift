@@ -13,18 +13,16 @@ import (
 
 var client *badger.DB
 
-func (mgdb MysteryGiftDB) SetUpDB() {
-	if client != nil {
-		var err error
-		opt := badger.DefaultOptions("").WithInMemory(true)
-		client, err = badger.Open(opt)
-		if err != nil {
-			fmt.Printf("Error while setting up db!\nError is %v", err)
-		}
+func SetUpDB() {
+	var err error
+	opt := badger.DefaultOptions("").WithInMemory(true)
+	client, err = badger.Open(opt)
+	if err != nil {
+		fmt.Printf("Error while setting up db!\nError is %v", err)
 	}
 }
 
-func (mgdb MysteryGiftDB) InsertDBData() {
+func InsertDBData() {
 	file, err := os.Open("gifts.toml")
 	if err != nil {
 		panic(err)
@@ -36,24 +34,29 @@ func (mgdb MysteryGiftDB) InsertDBData() {
 		panic(err)
 	}
 
-	var mysteryGifts []Models.MysteryGift
+	var mysteryGifts Models.MysteryGiftsServer
 
 	err = toml.Unmarshal(bytes, &mysteryGifts)
 
 	if err != nil {
+		fmt.Printf("Error occured while reading data!\nError is %v", err)
 		panic(err)
 	}
-	for mysteryGiftIndex := range mysteryGifts {
-		err = client.Update(func(txn *badger.Txn) error {
-			if mysteryGifts[mysteryGiftIndex].GiftType == "Pokemon" {
-				data := fmt.Sprintf("%v", mysteryGifts[mysteryGiftIndex].Pokemon)
-				txn.Set([]byte(mysteryGifts[mysteryGiftIndex].Name), []byte(data))
+
+	for mysteryGiftIndex := range mysteryGifts.Mysterygifts {
+		fmt.Printf("Looking at %s event!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
+		transactionErr := client.Update(func(txn *badger.Txn) error {
+			if mysteryGifts.Mysterygifts[mysteryGiftIndex].GiftType == "Pokemon" {
+				data := fmt.Sprintf("%v", mysteryGifts.Mysterygifts[mysteryGiftIndex].Pokemongift)
+				txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), []byte(data))
+				fmt.Printf("Have successfully inserted pokemon event %s!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
 				return nil
 			}
 			return nil
 		})
-		if err != nil {
-			panic(err)
+		if transactionErr != nil {
+			fmt.Printf("Error occured while inserting data!\nError is %v\n", err)
+			panic(transactionErr)
 		}
 	}
 }
@@ -62,12 +65,12 @@ func TimeCheck(startDate, endDate, playerDate time.Time) bool {
 	return startDate.After(playerDate) && endDate.Before(playerDate)
 }
 
-func (mgdb MysteryGiftDB) SearchDBData(currentDate string, giftName string) Models.MysteryGift {
+func SearchDBData(currentDate string, giftName string) Models.MysteryGiftServer {
 	// Create a byte array to copy the data from the db into
 	var mysteryGiftData []byte
 
 	// Create the struct to dump the returned data into
-	var mysteryGift Models.MysteryGift
+	var mysteryGift Models.MysteryGiftServer
 	// Begins the transaction of viewing the data
 	err := client.View(func(txn *badger.Txn) error {
 		// Grabs the specific data based off the gift name
