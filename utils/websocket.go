@@ -8,9 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{}
-var addr = flag.String("addr", ":8080", "http service address")
-
 func Reader(conn *websocket.Conn) {
 	for {
 		// read in a message
@@ -28,6 +25,7 @@ func Reader(conn *websocket.Conn) {
 }
 
 func WsEndpoint(w http.ResponseWriter, r *http.Request) {
+	var upgrader = websocket.Upgrader{}
 	// upgrade this connection to a WebSocket
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -42,6 +40,7 @@ func WsEndpoint(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRoutes() {
+	var addr = flag.String("addr", ":8080", "http service address")
 	http.HandleFunc("/ws", WsEndpoint)
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {

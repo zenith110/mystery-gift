@@ -11,6 +11,6 @@ func main() {
 	utils.SetUpDB()
 	fmt.Print("Have successfully set up db!\nInserting data now!\n")
 	utils.InsertDBData()
-	fmt.Print("Have successfully inserted data!\n")
+	fmt.Print("Have successfully inserted data!\nWaiting on client now...\n")
 	utils.HandleRoutes()
 }
