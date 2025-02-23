@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -47,8 +48,11 @@ func InsertDBData() {
 		fmt.Printf("Looking at %s event!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
 		transactionErr := client.Update(func(txn *badger.Txn) error {
 			if mysteryGifts.Mysterygifts[mysteryGiftIndex].GiftType == "Pokemon" {
-				data := fmt.Sprintf("%v", mysteryGifts.Mysterygifts[mysteryGiftIndex].Pokemongift)
-				txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), []byte(data))
+				data, err := json.Marshal(mysteryGifts.Mysterygifts[mysteryGiftIndex])
+				if err != nil {
+					return err
+				}
+				txn.Set([]byte(mysteryGifts.Mysterygifts[mysteryGiftIndex].Name), data)
 				fmt.Printf("Have successfully inserted pokemon event %s!\n", mysteryGifts.Mysterygifts[mysteryGiftIndex].Name)
 				return nil
 			}
@@ -65,47 +69,38 @@ func TimeCheck(startDate, endDate, playerDate time.Time) bool {
 	return startDate.After(playerDate) && endDate.Before(playerDate)
 }
 
-func SearchDBData(currentDate string, giftName string) Models.MysteryGiftServer {
-	// Create a byte array to copy the data from the db into
-	var mysteryGiftData []byte
-
+func SearchDBData(currentDate string) Models.MysteryGiftServer {
 	// Create the struct to dump the returned data into
 	var mysteryGift Models.MysteryGiftServer
 	// Begins the transaction of viewing the data
 	err := client.View(func(txn *badger.Txn) error {
-		// Grabs the specific data based off the gift name
-		data, _ := txn.Get([]byte(giftName))
-		// Creates a copy to be used for use outside of the db view
-		err := data.Value(func(val []byte) error {
-			// Copying or parsing val is valid.
-			mysteryGiftData = append([]byte{}, val...)
-
-			return nil
-		})
-
-		if err != nil {
-			panic(err)
+		opts := badger.DefaultIteratorOptions
+		opts.PrefetchSize = 10
+		it := txn.NewIterator(opts)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			item := it.Item()
+			err := item.Value(func(v []byte) error {
+				var gift Models.MysteryGiftServer
+				err := json.Unmarshal(v, &gift)
+				if err != nil {
+					fmt.Printf("Unmarshal error: %v\nValue: %s\n", err, string(v)) // Debug print
+					return err
+				}
+				if currentDate >= gift.BeginningDate && currentDate <= gift.EndDate {
+					mysteryGift = gift
+				}
+				return nil
+			})
+			if err != nil {
+				return err
+			}
 		}
-
-		err = toml.Unmarshal(mysteryGiftData, &mysteryGift)
-
-		if err != nil {
-			panic(err)
-		}
-
 		return nil
 	})
 	if err != nil {
-		panic(err)
+		fmt.Printf("Error occured while opening db!, error is %v\n", err)
 	}
-
-	// Checks if the player can recieve the gift based off the system clock(can be modified at any time by the user)
-	beginningDate, _ := time.Parse("2006-01-02", mysteryGift.BeginningDate)
-	endDate, _ := time.Parse("2006-01-02", mysteryGift.EndDate)
-	playerDate, _ := time.Parse("2006-01-02", currentDate)
-	if TimeCheck(beginningDate, endDate, playerDate) {
-		return mysteryGift
-	}
-
+	fmt.Print(mysteryGift)
 	return mysteryGift
 }

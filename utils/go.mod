@@ -6,7 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711205431-6f68c2cd85ae
+	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20250223131307-f876d785331c
 )
 
 require (

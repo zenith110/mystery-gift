@@ -2,10 +2,7 @@ module github.com/zenith110/mystery-gift
 
 go 1.21.1
 
-require (
-	github.com/gorilla/websocket v1.5.3
-	github.com/zenith110/mystery-gift/utils v0.0.0-00010101000000-000000000000
-)
+require github.com/zenith110/mystery-gift/utils v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
@@ -19,9 +16,10 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/flatbuffers v1.12.1 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/klauspost/compress v1.12.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20240711205431-6f68c2cd85ae // indirect
+	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20250223131307-f876d785331c // indirect
 	go.opencensus.io v0.22.5 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
