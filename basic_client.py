@@ -2,7 +2,7 @@ from websocket import create_connection
 from datetime import datetime
 import json
 
-ws = create_connection("ws://127.0.0.1:8080/echo")
+ws = create_connection("ws://127.0.0.1:8080/mysterygift")
 print("Sending 'Hello, World'...")
 
 data = {"time": datetime.now().isoformat()}

@@ -19,7 +19,7 @@ require (
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/klauspost/compress v1.12.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20250223131307-f876d785331c // indirect
+	github.com/zenith110/pokemon-go-engine-toml-models v0.0.0-20250223140129-f44c17210e27 // indirect
 	go.opencensus.io v0.22.5 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect

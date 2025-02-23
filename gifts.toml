@@ -15,3 +15,4 @@ types = [ "Grass",]
 abilites = [ "Overgrowth",]
 stats = [ 10, 10, 10, 10, 10, 10, 10,]
 moves = [ "Tackle", "Leaf Storm", "Life Leech", "Pound",]
+pokeballCaughtIn = "pokeball"

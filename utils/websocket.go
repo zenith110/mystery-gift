@@ -59,7 +59,7 @@ func Echo(w http.ResponseWriter, r *http.Request) {
 func HandleRoutes() {
 	flag.Parse()
 	log.SetFlags(0)
-	http.HandleFunc("/echo", Echo)
+	http.HandleFunc("/mysterygift", Echo)
 	log.Fatal(http.ListenAndServe(*addr, nil))
 	fmt.Println("Now running!")
 }
